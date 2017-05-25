@@ -1,0 +1,11 @@
+.idea
+*.pyc
+data.cfg
+*.mp3
+*.pkl
+*.xls
+*.xml
+*.txt
+*.csv
+*.pkl
+*.log
