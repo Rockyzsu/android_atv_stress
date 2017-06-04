@@ -16,6 +16,7 @@ class IQIYI_Stress():
         self.logname = "Logcat_%s.log" % self.date
         #windows not working
         #self.getLog()
+        self.version_count=0
 
     # 进入本地管理
     def localManagement(self):
@@ -74,17 +75,17 @@ class IQIYI_Stress():
 
     def testcase(self):
         print "debug"
-
+        '''
         d.press.back()
         d(text=u"游戏").click()
         d(text=u"游戏").click()
 
-        if d(textContains=u'狂野飙车').exists:
+        if d(textContains=u'v1.8.1').exists:
             print "Got version"
-            print d(textContains=u'狂野飙车').info
+            print d(textContains=u'v1.8.1').info
         else:
             print "Can't get version"
-
+        '''
 
         '''
         if d(text=u'剩余').exists:
@@ -105,16 +106,21 @@ class IQIYI_Stress():
         #self.person_center()
         #self.check_login()
         #self.check_download('')
+        self.tvos_12723()
+
 
     def input_name(self):
+        for _ in range(10):
+            d.press.left()
+            time.sleep(1)
         #从软键盘弹出来开始
-        for _ in range(6):
+        for _ in range(8):
             d.press.right()
             time.sleep(1)
         d.press.down()
         time.sleep(1)
         d.press.enter()
-
+        time.sleep(1)
         d.press.up()
         time.sleep(1)
         d.press.left()
@@ -249,10 +255,20 @@ class IQIYI_Stress():
         time.sleep(3)
         d.press.right()
         time.sleep(1)
-
+        d.press.back()
         #self.execute_cmd('adb shell input text 狂野飙车')
         #this not work
         #self.execute_cmd('adb shell input text kybc')
+
+        #d.press.down()
+        time.sleep(1)
+        d.press.right()
+        time.sleep(1)
+        d.press.enter()
+        time.sleep(10)
+
+        d.press.enter()
+        time.sleep(10)
 
 
     def download(self):
@@ -260,15 +276,19 @@ class IQIYI_Stress():
         time.sleep(5)
 
     def check_download(self,gamename):
+        gamename=u'狂野飙车'
         self.localManagement()
         d(text=u'队列').click()
 
         time.sleep(3)
-
+        d(text=u'队列').click()
         while 1:
-            if d(text=gamename).exists:
+            if d(textContains=gamename).exists:
                 time.sleep(30)
+
             else:
+                time.sleep(1)
+
                 d.press.back()
                 time.sleep(2)
 
@@ -287,14 +307,34 @@ class IQIYI_Stress():
         s = re.findall(p, fp)
         print s[0]
 
+    def delete_in_queue(self):
+        self.localManagement()
+        d(text=u'队列').click()
+        time.sleep(2)
+        d(text=u'队列').click()
+        time.sleep(2)
+        d.press.enter()
+        time.sleep(3)
+        d(text=u'删除游戏').click()
+        time.sleep(3)
+        d.press.enter()
+        time.sleep(3)
+        print u'游戏已从队列中删除'
+
+
     def delete_game_UI(self):
         self.localManagement()
-        d(text=u'游戏').click()
+        d(textContains=u'游戏').click()
         if d(textContains=u'1.53GB').exists:
             d.press.enter()
             time.sleep(3)
+
             try:
-                d(text=u'卸载游戏').click()
+                if d(textContains=u'v1.9.3').exists:
+                    time.sleep(2)
+                    print u"获取正确的版本号"
+                    self.version_count=self.version_count+1
+                d(textContains=u'卸载游戏').click()
                 time.sleep(2)
                 d.press.enter()
                 #查看包名有没有这个
@@ -309,14 +349,14 @@ class IQIYI_Stress():
         self.execute_cmd(cmd)
 
 
-    def getPackageName(self):
+    def getPackageName(self,packagename):
         p = subprocess.Popen('adb shell pm list packages', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         #p.communicate()
         #p.wait()
         package_list=p.stdout.read()
         #package_list
         #pattern='package:com.gameloft.android.HEP.GloftA8HP'
-        pattern='package:com.baxa.mappytv'
+        pattern=packagename
         result=re.findall(pattern,package_list)
         if len(result)==0:
             print "game has been deleted"
@@ -350,15 +390,32 @@ class IQIYI_Stress():
 
     def tvos_12723(self):
         #点击"卸载游戏"后的弹窗(V1.7)
-        self.delete_game_UI()
-        self.person_center()
-        self.check_login()
-        self.search_game()
-        self.input_name()
+        #self.delete_game_UI()
+        #elf.person_center()
+        #self.check_login()
+        passcount=0
+        for i in range(200):
+            print "Loop %d" %i
+            self.search_game()
+            #self.input_name()
+            self.check_download('')
+            s1=self.getPackageName('package:com.gameloft.android.HEP.GloftA8HP')
+            self.delete_game_UI()
+            s2=self.getPackageName('package:com.gameloft.android.HEP.GloftA8HP')
+            if s1 ==0:
+                print "game has been installed successfully"
+            else:
+                print "gamenot been installed properly"
+
+            if s2 ==1:
+                print "game has been uninstall successuflly"
+
+            if s1==0 and s2==1:
+                passcount=passcount+1
 
 
-
-
+        print "Uninstall Pass count: %d" %passcount
+        print "Verion pass count %d" %self.version_count
 
 def main():
 
