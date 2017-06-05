@@ -275,6 +275,17 @@ class IQIYI_Stress():
         d.press.enter()
         time.sleep(5)
 
+    #return 1 if package still exist
+    def packageExist(self,packagename):
+        p = subprocess.Popen('adb shell pm list packages', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        package_list=p.stdout.read()
+        pattern=packagename
+        result=re.findall(pattern,package_list)
+        if len(result)==0:
+            return 0
+        else:
+            return 1
+
     def check_download(self,gamename):
         gamename=u'狂野飙车'
         self.localManagement()
@@ -286,9 +297,10 @@ class IQIYI_Stress():
             if d(textContains=gamename).exists:
                 time.sleep(30)
 
-            else:
-                time.sleep(1)
+            elif self.packageExist('com.gameloft.android.HEP.GloftA8HP'):
+                time.sleep(30)
 
+            else:
                 d.press.back()
                 time.sleep(2)
 
@@ -296,8 +308,6 @@ class IQIYI_Stress():
                 time.sleep(1)
                 print u"下载完毕"
                 break
-
-
 
 
     def getAppID(self):
@@ -343,8 +353,8 @@ class IQIYI_Stress():
                 print e
                 return False
 
-    def delete_game_cmd(self,package):
-        packagename='com.baxa.mappytv'
+    def delete_game_cmd(self,packagename):
+        #packagename='com.baxa.mappytv'
         cmd='adb shell pm uninstall %s' %packagename
         self.execute_cmd(cmd)
 
@@ -394,19 +404,19 @@ class IQIYI_Stress():
         #elf.person_center()
         #self.check_login()
         passcount=0
+        package='com.gameloft.android.HEP.GloftA8HP'
         for i in range(200):
             print "Loop %d" %i
             self.search_game()
             #self.input_name()
-            self.check_download('')
-            s1=self.getPackageName('package:com.gameloft.android.HEP.GloftA8HP')
+            self.check_download(package)
+            s1=self.packageExist(package)
             self.delete_game_UI()
-            s2=self.getPackageName('package:com.gameloft.android.HEP.GloftA8HP')
+            s2=self.packageExist(package)
             if s1 ==0:
                 print "game has been installed successfully"
             else:
-                print "gamenot been installed properly"
-
+                print "game not been installed properly, Failed"
             if s2 ==1:
                 print "game has been uninstall successuflly"
 
@@ -416,6 +426,8 @@ class IQIYI_Stress():
 
         print "Uninstall Pass count: %d" %passcount
         print "Verion pass count %d" %self.version_count
+
+        #self.delete_game_cmd()
 
 def main():
 
