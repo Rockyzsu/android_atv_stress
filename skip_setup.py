@@ -28,10 +28,10 @@ def skip_setup_case():
     d.press.enter()
     time.sleep(2)
     d.press.back()
-    cmd='adb shell input text 13424281086'
+    cmd='adb shell input text xxxxxxx'
     d.press.enter()
     time.sleep(5)
-    cmd='adb shell input text 123456sqa'
+    cmd='adb shell input text xxxxxx'
     subprocess.Popen(cmd, shell=True)
     time.sleep(5)
     d.press.enter()
