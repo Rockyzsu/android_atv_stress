@@ -14,6 +14,9 @@ class IQIYI_Stress():
         #windows not working
         #self.getLog()
         self.version_count=0
+        os.system('adb root')
+        time.sleep(5)
+        #self.stay_on()
 
     # 进入本地管理
     def localManagement(self):
@@ -249,10 +252,11 @@ class IQIYI_Stress():
         d.press.up()
         time.sleep(1)
         d.press.enter()
-        time.sleep(3)
-        d.press.right()
-        time.sleep(1)
-        d.press.back()
+        print "Enter"
+        time.sleep(5)
+        d.press.down()
+        time.sleep(2)
+        #d.press.back()
         #self.execute_cmd('adb shell input text 狂野飙车')
         #this not work
         #self.execute_cmd('adb shell input text kybc')
@@ -276,8 +280,10 @@ class IQIYI_Stress():
     def packageExist(self,packagename):
         p = subprocess.Popen('adb shell pm list packages', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         package_list=p.stdout.read()
+        #print package_list
         pattern=packagename
         result=re.findall(pattern,package_list)
+        #print result
         if len(result)==0:
             return 0
         else:
@@ -292,9 +298,11 @@ class IQIYI_Stress():
         d(text=u'队列').click()
         while 1:
             if d(textContains=gamename).exists:
+                print "Downloading"
                 time.sleep(30)
 
-            elif self.packageExist('com.gameloft.android.HEP.GloftA8HP'):
+            elif self.packageExist('com.gameloft.android.HEP.GloftA8HP')==0:
+                print "Downloading, not found package"
                 time.sleep(30)
 
             else:
@@ -329,10 +337,44 @@ class IQIYI_Stress():
         print u'游戏已从队列中删除'
 
 
+    def stay_on(self):
+        print "Set stay on for 2 hours"
+        d.press.home()
+        time.sleep(3)
+        for _ in range(4):
+            d.press.down()
+            time.sleep(1)
+        for _ in range(2):
+            d.press.right()
+            time.sleep(1)
+
+        d.press.enter()
+        time.sleep(3)
+
+        for _ in range(5):
+            d.press.down()
+            time.sleep(1)
+
+        d.press.enter()
+        time.sleep(2)
+        d.press.down()
+        time.sleep(2)
+        d.press.enter()
+        time.sleep(3)
+
+        for _ in range(5):
+            d.press.down()
+            time.sleep(1)
+        d.press.enter()
+        time.sleep(3)
+        d.press.home()
+
+
     def delete_game_UI(self):
         self.localManagement()
         d(textContains=u'游戏').click()
-        if d(textContains=u'1.53GB').exists:
+        d(textContains=u'游戏').click()
+        if d(textContains=u'GB').exists:
             d.press.enter()
             time.sleep(3)
 
@@ -341,11 +383,20 @@ class IQIYI_Stress():
                     time.sleep(2)
                     print u"获取正确的版本号"
                     self.version_count=self.version_count+1
-                d(textContains=u'卸载游戏').click()
+                #d(textContains=u'卸载游戏').click()
+                d.press.down()
+                time.sleep(1)
+                d.press.down()
+                time.sleep(1)
+                d.press.down()
+                time.sleep(1)
+
                 time.sleep(2)
                 d.press.enter()
                 #查看包名有没有这个
-
+                time.sleep(2)
+                d.press.enter()
+                time.sleep(8)
             except Exception,e :
                 print e
                 return False
@@ -417,20 +468,26 @@ class IQIYI_Stress():
             if s2 ==1:
                 print "game has been uninstall successuflly"
 
-            if s1==0 and s2==1:
+            if s1==1 and s2==0:
                 passcount=passcount+1
+                print "Passed"
+            else:
+                print 'failed'
 
 
         print "Uninstall Pass count: %d" %passcount
         print "Verion pass count %d" %self.version_count
 
-        #self.delete_game_cmd()
 
+    def testcase2(self):
+        #self.search_game('')
+        self.delete_game_UI()
 def main():
 
     obj = IQIYI_Stress()
     obj.testcase()
     #狂野飙车的 包名 com.gameloft.android.HEP.GloftA8HP
 
+    #obj.testcase2()
 if __name__ == '__main__':
     main()
