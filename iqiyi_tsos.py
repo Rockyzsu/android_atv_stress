@@ -456,38 +456,42 @@ class IQIYI_Stress():
         for i in range(200):
             print "Loop %d" %i
             self.search_game()
-            #self.input_name()
             self.check_download(package)
             s1=self.packageExist(package)
             self.delete_game_UI()
             s2=self.packageExist(package)
-            if s1 ==0:
+            if s1 ==1:
                 print "game has been installed successfully"
             else:
-                print "game not been installed properly, Failed"
-            if s2 ==1:
+                print "game not been installed properly"
+            if s2 ==0:
                 print "game has been uninstall successuflly"
 
             if s1==1 and s2==0:
                 passcount=passcount+1
-                print "Passed"
+                print "Loop %d passed" %i
             else:
-                print 'failed'
+                print 'Loop %d failed' %i
 
 
         print "Uninstall Pass count: %d" %passcount
         print "Verion pass count %d" %self.version_count
 
+    def tvos_12761(self):
+        #pause download
+        pass
+
 
     def testcase2(self):
         #self.search_game('')
         self.delete_game_UI()
+
 def main():
 
     obj = IQIYI_Stress()
     obj.testcase()
     #狂野飙车的 包名 com.gameloft.android.HEP.GloftA8HP
-
     #obj.testcase2()
+
 if __name__ == '__main__':
     main()
