@@ -246,25 +246,25 @@ class IQIYI_Stress():
         d.press.right()
         time.sleep(1)
         d.press.enter()
-        time.sleep(3)
+        time.sleep(8)
         d.press.up()
         time.sleep(3)
         d.press.up()
-        time.sleep(1)
+        time.sleep(3)
         d.press.enter()
         print "Enter"
         time.sleep(5)
         d.press.down()
-        time.sleep(2)
+        time.sleep(3)
         #d.press.back()
         #self.execute_cmd('adb shell input text 狂野飙车')
         #this not work
         #self.execute_cmd('adb shell input text kybc')
 
         #d.press.down()
-        time.sleep(1)
+        time.sleep(3)
         d.press.right()
-        time.sleep(1)
+        time.sleep(3)
         d.press.enter()
         time.sleep(10)
 
@@ -304,6 +304,7 @@ class IQIYI_Stress():
             elif self.packageExist('com.gameloft.android.HEP.GloftA8HP')==0:
                 print "Downloading, not found package"
                 time.sleep(30)
+                self.search_game('x')
 
             else:
                 d.press.back()
@@ -385,11 +386,11 @@ class IQIYI_Stress():
                     self.version_count=self.version_count+1
                 #d(textContains=u'卸载游戏').click()
                 d.press.down()
-                time.sleep(1)
+                time.sleep(2)
                 d.press.down()
-                time.sleep(1)
+                time.sleep(2)
                 d.press.down()
-                time.sleep(1)
+                time.sleep(2)
 
                 time.sleep(2)
                 d.press.enter()
