@@ -107,6 +107,7 @@ class IQIYI_Stress():
         #self.check_login()
         #self.check_download('')
         self.tvos_12723()
+        #self.packageExist('com.gameloft.android.HEP.GloftD5HP')
 
 
     def input_name(self):
@@ -263,9 +264,9 @@ class IQIYI_Stress():
 
         #d.press.down()
         time.sleep(3)
-        d.press.right()
-        time.sleep(3)
-        d.press.right()
+        #d.press.right()
+        #time.sleep(3)
+        #d.press.right()
         time.sleep(3)
         d.press.enter()
         time.sleep(10)
@@ -298,22 +299,31 @@ class IQIYI_Stress():
 
         time.sleep(3)
         d(text=u'队列').click()
+        time.sleep(3)
         while 1:
             if d(textContains=gamename).exists:
                 print "Downloading"
-                time.sleep(30)
+                time.sleep(60)
 
-            elif self.packageExist('com.gameloft.android.HEP.GloftA8HP')==0:
+            elif self.packageExist('com.gameloft.android.HEP.GloftD5HP')==0:
                 print "Downloading, not found package"
-                time.sleep(30)
+                time.sleep(60)
                 self.search_game('x')
+                self.localManagement()
+                d(text=u'队列').click()
+
+                time.sleep(3)
+                d(text=u'队列').click()
+                time.sleep(3)
 
             else:
                 d.press.back()
                 time.sleep(2)
 
                 d(text=u'游戏').click()
-                time.sleep(1)
+                time.sleep(2)
+                d(text=u'游戏').click()
+                time.sleep(2)
                 print u"下载完毕"
                 break
 
@@ -377,12 +387,12 @@ class IQIYI_Stress():
         self.localManagement()
         d(textContains=u'游戏').click()
         d(textContains=u'游戏').click()
-        if d(textContains=u'GB').exists:
+        if d(textContains=u'地牢猎手').exists:
             d.press.enter()
             time.sleep(3)
 
             try:
-                if d(textContains=u'v1.9.3').exists:
+                if d(textContains=u'v1.1.8f').exists:
                     time.sleep(2)
                     print u"获取正确的版本号"
                     self.version_count=self.version_count+1
@@ -455,8 +465,8 @@ class IQIYI_Stress():
         #elf.person_center()
         #self.check_login()
         passcount=0
-        package='com.gameloft.android.HEP.GloftA8HP'
-        for i in range(200):
+        package='com.gameloft.android.HEP.GloftD5HP'
+        for i in range(500):
             print "Loop %d" %i
             self.search_game()
             self.check_download(package)
@@ -494,6 +504,7 @@ def main():
     obj = IQIYI_Stress()
     obj.testcase()
     #狂野飙车的 包名 com.gameloft.android.HEP.GloftA8HP
+    #com.gameloft.android.HEP.GloftD5HP
     #obj.testcase2()
 
 if __name__ == '__main__':
